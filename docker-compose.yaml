@@ -1,0 +1,27 @@
+version: "3.8"
+
+volumes:
+  postgres:
+
+services:
+  snippet_box:
+    build: ./
+    restart: always
+    command: /app/cmd/web/main
+    ports:
+    - 4000:4000
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+    - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_USER: postgres
+      POSTGRES_DB: snippetbox
+    volumes:
+    - ./postgres:/var/lib/postgres/data
+    - ./sql/:/docker-entrypoint-initdb.d/
